@@ -1,6 +1,13 @@
-# Benchmark-driven development
+# More recent benchmarks
+It was a while ago this page was written (and it needs updating), so here are the most recent benchmarks against the top competition we know of:
 
-Making decisions based on scientific benchmarking **while** you develop can guide you to create very efficient solutions if you have the dicipline to follow through. µWebSockets performs with **98%** the theoretical maximum for any user space Linux process - if anything would ever be faster, it would only be so by less than 2%. We know of no such project.
+v20 | v21
+--- | ---
+![](../misc/fastwebsockets.png) | ![](../misc/fastwebsockets_io_uring.png)
+
+
+# Benchmark-driven development
+Making decisions based on scientific benchmarking **while** you develop can guide you to create very efficient solutions if you have the dicipline to follow through. µWebSockets performs with **98%** the theoretical maximum for any user space Linux process [this was written before io_uring was added to Linux] - if anything would ever be faster, it would only be so by less than 2%. We know of no such project.
 
 Http | WebSockets
 --- | ---
@@ -32,6 +39,6 @@ Contrary to popular belief, "hello world benchmarks" are the most accurate and r
 * Chatting (memory overhead)
 * Notifications (memory overhead)
 
-Most business applications of the above mentioned categories are implemented without a central on-disk DB, blocking or severely limiting hot-path performance. As such, web IO becomes a significant part of overall bottleneck, if not the only bottleneck.
+Most business applications of the above mentioned categories are implemented without a central on-disk DB, blocking or severely limiting hot-path performance. As such, web IO becomes a significant part of overall bottleneck, if not the only bottleneck. Message echoing of around 1-16 kB or even as small as 512 bytes is a good test of the overall server plumbing (receive -> timeout clear -> emit to app -> timeout set -> send) for these applications.
 
 Of course, if you build an app that *absolutely must* have an on-disk SQL DB central to all hot-paths, then µWebSockets is not the right tool for your app. Keep in mind that, finding a case where µWebSockets makes no difference, does not mean µWebSockets never makes a difference.
