@@ -153,5 +153,11 @@ namespace uWS {
                 return true;
             });
         }
+
+        void clearRouter() {
+            Http3ContextData *contextData = (Http3ContextData *) us_quic_socket_context_ext((us_quic_socket_context_t *) this);
+
+            contextData->router.clear();
+        }
     };
 }

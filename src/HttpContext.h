@@ -416,6 +416,10 @@ public:
         getSocketContextData()->filterHandlers.emplace_back(std::move(filterHandler));
     }
 
+    void clearRouter() {
+        getSocketContextData()->currentRouter->clear();
+    }
+
     /* Register an HTTP route handler acording to URL pattern */
     void onHttp(std::string method, std::string pattern, MoveOnlyFunction<void(HttpResponse<SSL> *, HttpRequest *)> &&handler, bool upgrade = false) {
         HttpContextData<SSL> *httpContextData = getSocketContextData();

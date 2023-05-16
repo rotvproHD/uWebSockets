@@ -80,14 +80,15 @@ namespace uWS {
 template <bool SSL>
 struct TemplatedApp {
 private:
-    /* The app always owns at least one http context, but creates websocket contexts on demand */
-    HttpContext<SSL> *httpContext;
     /* WebSocketContexts are of differing type, but we as owners and creators must delete them correctly */
     std::vector<MoveOnlyFunction<void()>> webSocketContextDeleters;
 
     std::vector<void *> webSocketContexts;
 
 public:
+
+    /* The app always owns at least one http context, but creates websocket contexts on demand */
+    HttpContext<SSL> *httpContext;
 
     TopicTree<TopicTreeMessage, TopicTreeBigMessage> *topicTree = nullptr;
 

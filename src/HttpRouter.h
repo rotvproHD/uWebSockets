@@ -72,7 +72,7 @@ private:
         if (!name.length()) {
             return 2;
         }
-        if (name[0] == ':') {
+        if (name[0] == '<' && name[name.length() - 1] == '>') {
             return 1;
         }
         if (name[0] == '*') {
@@ -193,7 +193,7 @@ private:
                         return true;
                     }
                 }
-            } else if (p->name.length() && p->name[0] == ':' && segment.length()) {
+            } else if (p->name.length() && p->name[0] == '<' && p->name[p->name.length() - 1] == '>' && segment.length()) {
                 /* Parameter match */
                 routeParameters.push(segment);
                 if (executeHandlers(p.get(), urlSegment + 1, userData)) {
@@ -356,6 +356,10 @@ public:
 
         /* Now remove the actual handler */
         handlers.erase(handlers.begin() + (handler & HANDLER_MASK));
+    }
+
+    void clear() {
+        handlers.clear();
     }
 };
 
