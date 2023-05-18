@@ -76,7 +76,7 @@ private:
     /* Called only once per request */
     void writeMark() {
         /* Date is always written */
-        writeHeader("Date", std::string_view(((LoopData *) us_loop_ext(us_socket_context_loop(SSL, (us_socket_context(SSL, (us_socket_t *) this)))))->date, 29));
+        writeHeader("date", std::string_view(((LoopData *) us_loop_ext(us_socket_context_loop(SSL, (us_socket_context(SSL, (us_socket_t *) this)))))->date, 29));
     }
 
     /* Returns true on success, indicating that it might be feasible to write more data.
@@ -101,7 +101,7 @@ private:
              *
              * This check also serves to limit writing the header only once. */
             if ((httpResponseData->state & HttpResponseData<SSL>::HTTP_CONNECTION_CLOSE) == 0) {
-                writeHeader("Connection", "close");
+                writeHeader("connection", "close");
             }
 
             httpResponseData->state |= HttpResponseData<SSL>::HTTP_CONNECTION_CLOSE;
@@ -153,7 +153,7 @@ private:
                 /* WebSocket upgrades does not allow content-length */
                 if (allowContentLength) {
                     /* Even zero is a valid content-length */
-                    Super::write("Content-Length: ", 16);
+                    Super::write("content-length: ", 16);
                     writeUnsigned64(totalSize);
                     Super::write("\r\n\r\n", 4);
                 } else {
@@ -238,13 +238,13 @@ public:
         WebSocketHandshake::generate(secWebSocketKey.data(), secWebSocketAccept);
 
         writeStatus("101 Switching Protocols")
-            ->writeHeader("Upgrade", "websocket")
-            ->writeHeader("Connection", "Upgrade")
-            ->writeHeader("Sec-WebSocket-Accept", secWebSocketAccept);
+            ->writeHeader("upgrade", "websocket")
+            ->writeHeader("connection", "Upgrade")
+            ->writeHeader("sec-websocket-accept", secWebSocketAccept);
 
         /* Select first subprotocol if present */
         if (secWebSocketProtocol.length()) {
-            writeHeader("Sec-WebSocket-Protocol", secWebSocketProtocol.substr(0, secWebSocketProtocol.find(',')));
+            writeHeader("sec-websocket-protocol", secWebSocketProtocol.substr(0, secWebSocketProtocol.find(',')));
         }
 
         /* Negotiate compression */
@@ -289,7 +289,7 @@ public:
                     compressOptions = CompressOptions(compressOptions | (negInflationWindow << 8));
                 }
 
-                writeHeader("Sec-WebSocket-Extensions", negResponse);
+                writeHeader("sec-websocket-extensions", negResponse);
             }
         }
 
@@ -447,7 +447,7 @@ public:
             /* Write mark on first call to write */
             writeMark();
 
-            writeHeader("Transfer-Encoding", "chunked");
+            writeHeader("transfer-encoding", "chunked");
             httpResponseData->state |= HttpResponseData<SSL>::HTTP_WRITE_CALLED;
         }
 
